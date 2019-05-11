@@ -1,9 +1,8 @@
 import java.net.*;
 import java.io.*;
-import java.util.Random;
 
 /*
-* Jogo de corrida usando arquitetura cliente-servidor.
+* Programa que simula um roteador.
 * 
 * @author Guilherme Piccoli, Fernando Maioli, Igor Brehm
 */
@@ -18,7 +17,7 @@ public class Server extends Thread {
         serverSocket = new ServerSocket(port);
         this.board_size = board_size;
     }
-
+    /*
     // Metodo que executa as rodadas de uma partida do jogo
     public void rodadas(String[] players,DataInputStream in, DataInputStream in2, DataOutputStream out, DataOutputStream out2){
         try{
@@ -118,7 +117,7 @@ public class Server extends Thread {
             e.printStackTrace();
         }
     }
-
+    */
     //Metodo que inicializa as coneccoes com os jogadores e organiza o inicio da partida
     public void run() {
         try {
@@ -202,139 +201,7 @@ public class Server extends Thread {
             e.printStackTrace();
         }
     }
-    
-    //Metodo que realiza a movimentacao de um jogador no tabuleiro
-    public void switchCasos(int player,int board_score, DataOutputStream jogador1, DataOutputStream jogador2){
-        Random r = new Random();
-        try {
-            switch(board_score) {
-                case 0: 
-                    break;
-                case 1:
-                    if(player == 1){
-                        jogador1.writeUTF("Voce passou sobre oleo, e ira voltar duas casas");
-                        if (scores[0] >= 2) {
-                            scores[0] -= 2;
-                        }
-                        else scores[0] = 0;
-
-                        jogador2.writeUTF("Voce deu sorte, seu adversario passou sobre oleo e retornou duas casas");
-                        break; 
-                    }
-                    else{
-                        jogador1.writeUTF("Voce passou sobre oleo, e ira voltar duas casas");
-                        if (scores[1] >= 2) {
-                            scores[1] -= 2;
-                        }
-                        else scores[1] = 0;
-
-                        jogador2.writeUTF("Voce deu sorte, seu adversario passou sobre oleo e retornou duas casas");
-                        break; 
-                    }
-
-                case 2:
-                    if(player == 1){
-                        jogador1.writeUTF("Voce derrapou na curva e ira voltar uma casa");
-                        if (scores[0] >= 1) {
-                            scores[0] -= 1;
-                        }
-                        else scores[0] = 0;
-                        jogador2.writeUTF("Seu adversario errou a curva e retornou uma casa");
-                        break;   
-                    }
-                    else{
-                        jogador1.writeUTF("Voce derrapou na curva e ira voltar uma casa");
-                        if (scores[1] >= 1) {
-                            scores[1] -= 1;
-                        }
-                        else scores[1] = 0;
-                        jogador2.writeUTF("Seu adversario errou a curva e retornou uma casa");
-                        break;   
-                    }
-
-                case 3:
-                    if(player == 1){
-                        jogador1.writeUTF("Voce acabou de passar por um turbo, e ira andar mais duas casas");
-                        scores[0] += 2;
-                        jogador2.writeUTF("Seu adversario pegou um turbo e acelerou mais duas casas a frente");
-                        break;  
-                    }
-                    else{
-                        jogador1.writeUTF("Voce acabou de passar por um turbo, e ira andar mais duas casas");
-                        scores[1] += 2;
-                        jogador2.writeUTF("Seu adversario pegou um turbo e acelerou mais duas casas a frente");
-                        break;  
-                    }
-
-                case 4:
-                    if(player == 1){
-                        jogador1.writeUTF("Voce acabou de passar por um buraco, e ira retornar mais duas casas");
-                        if (scores[0] >= 2) {
-                            scores[0] -= 2;
-                        }
-                        else scores[0] = 0;
-                        jogador2.writeUTF("Seu adversario passou por um buraco e voltou duas casas");
-                        break; 
-                    }
-                    else{
-                        jogador1.writeUTF("Voce acabou de passar por um buraco, e ira retornar mais duas casas");
-                        if (scores[1] >= 2) {
-                            scores[1] -= 2;
-                        }
-                        else scores[1] = 0;
-                        jogador2.writeUTF("Seu adversario passou por um buraco e voltou duas casas");
-                        break; 
-                    }
-
-                case 5:
-                    if(player == 1){
-                        jogador1.writeUTF("Voce acabou de realizar uma curva perfeita, e ira andar mais uma casa");
-                        scores[0] += 1;
-
-                        jogador2.writeUTF("Seu adversario se deu bem na curva, e andou mais uma casa");
-                        break;   
-                    }
-                    else{
-                        jogador1.writeUTF("Voce acabou de realizar uma curva perfeita, e ira andar mais uma casa");
-                        scores[1] += 1;
-
-                        jogador2.writeUTF("Seu adversario se deu bem na curva, e andou mais uma casa");
-                        break;
-                    }
-                    
-                case 6:
-                    int muitaSorte = r.nextInt(2);
-                    if(player == 1){
-                        if (muitaSorte == 1) {
-                            jogador1.writeUTF("Uau, que habilidade!!! Voce encontrou um atalho e ira pular 4 casas");
-                            scores[0] += 4;
-                            jogador2.writeUTF("De repente seu adversario pulou 4 casas, que loucura!!!");
-                            break;
-                        }
-                        else {
-                            break;
-                        }
-                    }
-                    else{
-                        if (muitaSorte == 1) {
-                            jogador1.writeUTF("Uau, que habilidade!!! Voce encontrou um atalho e ira pular 4 casas");
-                            scores[1] += 4;
-                            jogador2.writeUTF("De repente seu adversario pulou 4 casas, que loucura!!!");
-                            break;
-                        }
-                        else {
-                            break;
-                        }
-                    }
-
-                default:
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-         }
-   }
-    
+  
     // Metodo main que inicia o programa servidor
     public static void main(String [] args) {
         int port = Integer.parseInt(args[0]);

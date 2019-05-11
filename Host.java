@@ -1,19 +1,18 @@
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
-import java.util.Random;
 
 /*
- * Jogo de corrida usando arquitetura cliente-servidor.
+ * Programa que simula um host/maquina de uma rede.
  * 
  * @author Guilherme Piccoli, Fernando Maioli, Igor Brehm
  */
 
-public class Client {
+public class Host {
     private String serverName;
     private int port;
     
-    public Client(String serverName,int port) {
+    public Host(String serverName,int port) {
         this.serverName = serverName;
         this.port = port;
         play();
@@ -75,76 +74,6 @@ public class Client {
                     System.out.println("\nDigite seu nome:");
                     name = input.nextLine();
                     out.writeUTF("Name-"+name);
-                }
-            }
-            
-            int res = 0;
-            int roll = 0;
-            boolean flag = false;
-            //Executando as rodadas
-            while(flag == false){
-                serverSentence = in.readUTF();
-                if(serverSentence.equals("Aguardando adversario")){
-                    System.out.println(serverSentence);
-                    while(true){
-                        serverSentence = in.readUTF();
-                        if(serverSentence.equals("Sua vez")){
-                            System.out.println("\n"+serverSentence);
-                            System.out.println("\nDigite 1 para jogar o dado, 2 para sair:");
-                            res = input.nextInt();
-                            if(res == 2){
-                                out.writeUTF("Exit-"+name);
-                                flag = true;
-                                break;   
-                            }
-                            roll = r.nextInt(5) + 1;
-                            System.out.println("\nAvancou " + roll + " casas!\n");
-                            out.writeUTF("Roll-"+roll);
-                            break;
-                        }
-                        else if(serverSentence.equals("Fim de jogo")){
-                            serverSentence = in.readUTF();
-                            System.out.println(serverSentence);
-                            flag = true;
-                            break;   
-                        }
-                        else if(serverSentence.equals("Desistencia")){
-                            System.out.println("Infelizmente, seu adversario desistiu do jogo.");
-                            System.out.println("Por conta disso, a partida sera encerrada.");
-                            System.out.println("Esperamos poder jogar com voce novamente.");
-                            flag=true;
-                            break;
-                        }
-                        else{
-                            System.out.println(serverSentence);
-                        }
-                    }            
-                }
-                else if(serverSentence.equals("Sua vez")){
-                    System.out.println("\n"+serverSentence);
-                    System.out.println("\nDigite 1 para jogar o dado, 2 para sair:");
-                    res = input.nextInt();
-                    if(res == 2){
-                        out.writeUTF("Exit-"+name);
-                        break;   
-                    }
-                    roll = r.nextInt(5) + 1;
-                    System.out.println("\nAvancou " + roll + " casas!\n");
-                    out.writeUTF("Roll-"+roll);
-                }
-                else if(serverSentence.equals("Fim de jogo")){
-                    serverSentence = in.readUTF();
-                    System.out.println(serverSentence);
-                    break;   
-                }
-                else if(serverSentence.equals("Desistencia")){
-                    System.out.println("Infelizmente, seu adversário desistiu do jogo.");
-                    System.out.println("Por conta disso, a partida sera encerrada.");
-                    System.out.println("Esperamos poder jogar com você novamente.");
-                    break;
-                }
-                else {
-                    System.out.println(serverSentence);
                 }
             }
             client.close();
