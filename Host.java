@@ -11,11 +11,11 @@ import java.util.Scanner;
 public class Host {
     
     public static void main(String args[]) throws Exception {
-        String ip = args[0];
-        int port = Integer.parseInt(args[1]);
+        int port = Integer.parseInt(args[0]);
+        InetAddress IPAddress = InetAddress.getByName("localhost");
 
         Scanner in = new Scanner (System.in);
-        File file = new File();
+        File file = new File(args[1]);
         Scanner input = new Scanner (file);
 
         while (input.hasNextLine()) {
@@ -26,13 +26,12 @@ public class Host {
 
             sendData = message.getBytes();
 
-            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 
             clientSocket.send(sendPacket);
-
-            clientSocket.close();
+            
         }
-
+        clientSocket.close();
         input.close();
     }
 }
