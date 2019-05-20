@@ -11,7 +11,7 @@ public class Router {
 
     // Metodo main que inicia o programa router
     public static void main(String args[]) throws Exception {
-   		DatagramSocket serverSocket = new DatagramSocket(9876);
+   		DatagramSocket serverSocket = new DatagramSocket(Integer.parseInt(args[0]));
 
         byte[] receiveData = new byte[1024];
         boolean flag = true;
@@ -21,12 +21,8 @@ public class Router {
 	         serverSocket.receive(receivePacket);
 	
 	         String sentence = new String(receivePacket.getData());
-	         int port = receivePacket.getPort();
 	
 	         System.out.println("Mensagem recebida: " + sentence);
-	         if(port == 99999){
-	         	flag = false;
-	         }
         }
         serverSocket.close();
    }
