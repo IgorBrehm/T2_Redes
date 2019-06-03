@@ -10,6 +10,8 @@ import java.io.*;
 public class Router {
 
     // Metodo main que inicia o programa router
+    //falta implementar uma repeticao no processo de direcionamento de arquivos recebidos
+    //falta implementar o programa ficar esperando a todo momento por receber arquivos de outros hosts e routers
     public static void main(String args[]) throws Exception {
    		DatagramSocket serverSocket = new DatagramSocket(Integer.parseInt(args[0]));
 
