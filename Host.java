@@ -54,6 +54,9 @@ public class Host {
         String ip = in.nextLine();
         System.out.println("Especifique a porta do router a ser usado:");
         int router_port = Integer.parseInt(in.nextLine());
+        
+        DatagramSocket clientSocket = new DatagramSocket();
+        
         while(true){
             System.out.println("---------------------------------------------------------");
             System.out.println("--- 1. Enviar Arquivo ---");
@@ -74,12 +77,10 @@ public class Host {
                 System.out.println("Enviando arquivo...");
                 Scanner input = new Scanner (file);
                 
-                DatagramSocket clientSocket = new DatagramSocket();
                 while (input.hasNextLine()) {
-                    String message = ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
-                    
-                    byte[] sendData = new byte[1024];
+                    String message = "file" + "|" + ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
 
+                    byte[] sendData = new byte[1024];
                     sendData = message.getBytes();
                     
                     if(ip.equals(destination_ip)){ //envia direto para o host
@@ -101,6 +102,5 @@ public class Host {
             }
         }
         clientSocket.close();
-        input.close();
     }
 }
