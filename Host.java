@@ -38,13 +38,13 @@ Não existirá um número fixo de hosts, eles poderão ser incluídos a qualquer
 rede. (PRONTO?)
 
 Visualização dos Resultados:
-• demonstração deverá acontecer em mais de uma máquina (no mínimo 2);
-• deve permitir a edição de um pacote a ser enviado a algum destino (IP, porta, dados);
-• na chegada de um pacote ao destino, seu conteúdo deve ser mostrado;
-• deve ser possível visualizar o roteamento realizado.
+• demonstração deverá acontecer em mais de uma máquina (no mínimo 2); (PRONTO)
+• deve permitir a edição de um pacote a ser enviado a algum destino (IP, porta, dados); (PRONTO?)
+• na chegada de um pacote ao destino, seu conteúdo deve ser mostrado; (TODO)
+• deve ser possível visualizar o roteamento realizado. (PARTIALLY DONE)
 */
 public class Host {
-    //falta implementar uma repeticao no processo de envio de arquivo ate a pessoa querer parar de enviar coisas
+
     //falta implementar o programa ficar esperando a todo momento por receber arquivos de outros hosts
     public static void main(String args[]) throws Exception {
         Scanner in = new Scanner(System.in);
@@ -54,38 +54,52 @@ public class Host {
         String ip = in.nextLine();
         System.out.println("Especifique a porta do router a ser usado:");
         int router_port = Integer.parseInt(in.nextLine());
-        System.out.println("Indique o caminho completo do arquivo a ser enviado:");
-        String path = in.nextLine();
-        String array[] = path.split("/");
-        String filename = array[array.length - 1];
-        System.out.println(filename);
-        File file = new File(path);
-        System.out.println("Qual o IP de destino?");
-        String destination_ip = in.nextLine();
-        System.out.println("Qual a porta de destino?");
-        int destination_port = Integer.parseInt(in.nextLine());
-        System.out.println("Enviando arquivo...");
-        Scanner input = new Scanner (file);
-        
-        DatagramSocket clientSocket = new DatagramSocket();
-        while (input.hasNextLine()) {
-            String message = ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
-            
-            byte[] sendData = new byte[1024];
+        while(true){
+            System.out.println("---------------------------------------------------------");
+            System.out.println("--- 1. Enviar Arquivo ---");
+            System.out.println("--- 2. Sair           ---");
+            System.out.println("---------------------------------------------------------");
+            int choice = in.nextInt();
+            if(choice == 1){
+                System.out.println("Indique o caminho completo do arquivo a ser enviado:");
+                String path = in.nextLine();
+                String array[] = path.split("/");
+                String filename = array[array.length - 1];
+                System.out.println(filename);
+                File file = new File(path);
+                System.out.println("Qual o IP de destino?");
+                String destination_ip = in.nextLine();
+                System.out.println("Qual a porta de destino?");
+                int destination_port = Integer.parseInt(in.nextLine());
+                System.out.println("Enviando arquivo...");
+                Scanner input = new Scanner (file);
+                
+                DatagramSocket clientSocket = new DatagramSocket();
+                while (input.hasNextLine()) {
+                    String message = ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
+                    
+                    byte[] sendData = new byte[1024];
 
-            sendData = message.getBytes();
-            
-            if(ip.equals(destination_ip)){ //envia direto
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(destination_ip), destination_port);
-                clientSocket.send(sendPacket);
+                    sendData = message.getBytes();
+                    
+                    if(ip.equals(destination_ip)){ //envia direto para o host
+                        System.out.println("Rota: "+ ip + "/" + port + " -> " + destination_ip + "/" + destination_port);
+                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(destination_ip), destination_port);
+                        clientSocket.send(sendPacket);
+                    }
+                    else{ //envia pro router
+                        System.out.println("Rota: "+ ip + "/" + port + " -> " + ip + "/" + router_port);
+                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ip), router_port);
+                        clientSocket.send(sendPacket);
+                    }
+                    
+                }
+                System.out.println("Arquivo enviado!");
             }
-            else{ //envia pro router
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ip), router_port);
-                clientSocket.send(sendPacket);
+            else{
+                break;
             }
-            
         }
-        System.out.println("Arquivo enviado!");
         clientSocket.close();
         input.close();
     }
