@@ -10,14 +10,28 @@ import java.util.ArrayList;
 
 public class Router {
 
+    public static int findIndex(ArrayList<ArrayList<String>> matrix, String filename){
+        int index = -1;
+        for(int i = 0; i < matrix.size(); i++){
+            if(matrix.get(i).get(0).equals(filename)){
+                index = i;
+            }
+        }
+        return index;
+    }
+
     // Metodo main que inicia o programa router
     public static void main(String args[]) throws Exception {
         String ip = args[0];
         int port = 5723;
    		DatagramSocket serverSocket = new DatagramSocket(port);
         DatagramSocket clientSocket = new DatagramSocket();
+        
+        File dir = new File(Integer.toString(port)); //pasta de destino das mensagens recebidas
+        dir.mkdir();
+        
+        ArrayList<ArrayList<String>> matrix = new ArrayList<ArrayList<String>>();
 
-        ArrayList<String> routers_list = new ArrayList<String>();
         byte[] receiveData = new byte[1024];
         boolean flag = true;
         while(flag == true) {
@@ -50,8 +64,24 @@ public class Router {
                  clientSocket.send(sendPacket);
              }
              else{ //mensagem para este router
-                 //salvar arquivo em disco
-                 // falta criar a folder pra esse brother
+                 int index = findIndex(matrix, filename);
+                 if(findIndex(matrix,filename) == -1){
+                    ArrayList<String> row = new ArrayList<String>();
+                    row.add(filename);
+                    row.add(message_data);
+                    matrix.add(row);
+                 }
+                 else if(message_data.equals("ENDOFFILE")){
+                     PrintStream stream = new PrintStream(new File(filename));
+                     for(int i = 1; i < matrix.get(index).size(); i++){
+                         stream.println(matrix.get(index).get(i)); 
+                     }
+                     stream.close();
+                     matrix.remove(index);
+                 }
+                 else{
+                     matrix.get(index).add(message_data);
+                 }
              }
         }
         serverSocket.close();
