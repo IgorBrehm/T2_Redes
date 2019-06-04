@@ -43,10 +43,31 @@ Visualização dos Resultados:
 • na chegada de um pacote ao destino, seu conteúdo deve ser mostrado; (TODO)
 • deve ser possível visualizar o roteamento realizado. (PARTIALLY DONE)
 */
-public class Host {
-
+public class Host{
+    
+    public static void haha() {
+        try {
+            // ficar esperando arquivos que chegam e salvar eles na folder
+            System.out.println("we did get here ma friend");
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     //falta implementar o programa ficar esperando a todo momento por receber arquivos de outros hosts
     public static void main(String args[]) throws Exception {
+        try {
+            Thread t = new Thread() {
+                public void run() {
+                    haha();
+                }
+            };
+            t.start();
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        // falta criar folder especifica pra esse lek
         Scanner in = new Scanner(System.in);
         System.out.println("Digite a porta deste host:");
         int port = Integer.parseInt(in.nextLine());

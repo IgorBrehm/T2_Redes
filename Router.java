@@ -51,6 +51,7 @@ public class Router {
              }
              else{ //mensagem para este router
                  //salvar arquivo em disco
+                 // falta criar a folder pra esse brother
              }
         }
         serverSocket.close();
