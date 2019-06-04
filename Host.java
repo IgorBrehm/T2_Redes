@@ -13,7 +13,7 @@ import java.util.Scanner;
 Uma máquina poderá ter vários processos de transferência de arquivos, onde cada processo
 será considerado uma máquina diferente na rede simulada. Quando um arquivo precisar ser
 entregue para uma outra rede, ela precisará ser enviado para o processo que faz o papel de roteador
-e este deverá enviar o pacote para a outra máquina. (TODO)
+e este deverá enviar o pacote para a outra máquina. (PRONTO)
 
 O endereço das máquinas da rede simulada deve corresponder a um par <IP,Porta>. Nesse
 par <IP, Porta>, IP é o endereço da máquina onde o módulo que implementa um host está
@@ -35,7 +35,7 @@ destino receber um arquivo, o mesmo deve ser sinalizado com uma mensagem na tela
 armazenado na própria máquina. (TODO)
 
 Não existirá um número fixo de hosts, eles poderão ser incluídos a qualquer momento na
-rede. (PRONTO?)
+rede. (PRONTO)
 
 Visualização dos Resultados:
 • demonstração deverá acontecer em mais de uma máquina (no mínimo 2); (PRONTO)
@@ -52,8 +52,6 @@ public class Host {
         int port = Integer.parseInt(in.nextLine());
         System.out.println("Agora digite o IP a ser usado:");
         String ip = in.nextLine();
-        System.out.println("Especifique a porta do router a ser usado:");
-        int router_port = Integer.parseInt(in.nextLine());
         
         DatagramSocket clientSocket = new DatagramSocket();
         
@@ -68,7 +66,6 @@ public class Host {
                 String path = in.nextLine();
                 String array[] = path.split("/");
                 String filename = array[array.length - 1];
-                System.out.println(filename);
                 File file = new File(path);
                 System.out.println("Qual o IP de destino?");
                 String destination_ip = in.nextLine();
@@ -78,7 +75,7 @@ public class Host {
                 Scanner input = new Scanner (file);
                 
                 while (input.hasNextLine()) {
-                    String message = "file" + "|" + ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
+                    String message = ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
 
                     byte[] sendData = new byte[1024];
                     sendData = message.getBytes();
@@ -89,11 +86,10 @@ public class Host {
                         clientSocket.send(sendPacket);
                     }
                     else{ //envia pro router
-                        System.out.println("Rota: "+ ip + "/" + port + " -> " + ip + "/" + router_port);
-                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ip), router_port);
+                        System.out.println("Rota: "+ ip + "/" + port + " -> " + ip + "/" + "5723");
+                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ip), 5723);
                         clientSocket.send(sendPacket);
                     }
-                    
                 }
                 System.out.println("Arquivo enviado!");
             }
