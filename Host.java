@@ -112,7 +112,9 @@ public class Host{
             int choice = in.nextInt();
             if(choice == 1){
                 System.out.println("Indique o caminho completo do arquivo a ser enviado:");
+                String dump = in.nextLine();
                 String path = in.nextLine();
+                System.out.println("File: "+path);
                 String array[] = path.split("/");
                 String filename = array[array.length - 1];
                 File file = new File(path);
@@ -126,7 +128,8 @@ public class Host{
                 
                 byte[] sendData = new byte[1024];
                 while (input.hasNextLine()) {
-                    String message = ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + input.nextLine();
+                    String message = ip + "-" + destination_ip + "-" + port + "-" + destination_port + "-" + filename + "-" + input.nextLine();
+                    System.out.println("Message: "+message);
 
                     sendData = message.getBytes();
                     
@@ -142,8 +145,8 @@ public class Host{
                     }
                 }
                 
-                String message = ip + "|" + destination_ip + "|" + port + "|" + destination_port + "|" + filename + "|" + "ENDOFFILE";
-
+                String message = ip + "-" + destination_ip + "-" + port + "-" + destination_port + "-" + filename + "-" + "ENDOFFILE";
+                System.out.println("Message: "+message);
                 sendData = message.getBytes();
                 
                 if(ip.equals(destination_ip)){ //envia direto para o host
@@ -159,9 +162,9 @@ public class Host{
                 System.out.println("Arquivo enviado!");
             }
             else{
-                break;
+                clientSocket.close();
+                System.exit(0);
             }
         }
-        clientSocket.close();
     }
 }
