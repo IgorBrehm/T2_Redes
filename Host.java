@@ -35,14 +35,21 @@ public class Host{
                  serverSocket.receive(receivePacket);
                  
                  String sentence = new String(receivePacket.getData());
-                 String array[] = sentence.split("|");
+                 String array[] = sentence.split("-");
                  String sender_ip = array[0];
                  String destination_ip = array[1];
                  String sender_port = array[2];
                  String destination_port = array[3];
                  String filename = array[4];
                  String message_data = array[5];
+                 message_data = message_data.trim();
                  System.out.println("Mensagem recebida: " + sentence);
+                 System.out.println("Sender IP: " + sender_ip);
+                 System.out.println("Dest IP: " + destination_ip);
+                 System.out.println("Sender Port: " + sender_port);
+                 System.out.println("Dest Port: " + destination_port);
+                 System.out.println("Filename: " + filename);
+                 System.out.println("Data: " + message_data);
                  
                  int index = findIndex(matrix, filename);
                  if(findIndex(matrix,filename) == -1){
