@@ -46,6 +46,7 @@ public class Router {
              String destination_port = array[3];
              String filename = array[4];
              String message_data = array[5];
+             message_data = message_data.trim();
              System.out.println("Mensagem recebida: " + sentence);
              System.out.println("Sender IP: " + sender_ip);
              System.out.println("Dest IP: " + destination_ip);
@@ -72,20 +73,27 @@ public class Router {
              else{ //mensagem para este router
                  int index = findIndex(matrix, filename);
                  if(findIndex(matrix,filename) == -1){
+                    System.out.println("ENTROU 1");
                     ArrayList<String> row = new ArrayList<String>();
                     row.add(filename);
                     row.add(message_data);
                     matrix.add(row);
                  }
-                 else if(message_data.equals("ENDOFFILE")){
-                     PrintStream stream = new PrintStream(new File(filename));
+                 else if(message_data.contains("ENDOFFILE")){
+                     System.out.println("ENTROU 2");
+                     String path = System.getProperty("user.dir")+"/"+port+"/"+filename;
+                     System.out.println("PATH: "+ path);
+                     FileWriter fileWriter = new FileWriter(path);
+                     PrintWriter printWriter = new PrintWriter(fileWriter);
+                     
                      for(int i = 1; i < matrix.get(index).size(); i++){
-                         stream.println(matrix.get(index).get(i)); 
+                         printWriter.println(matrix.get(index).get(i)); 
                      }
-                     stream.close();
+                     printWriter.close();
                      matrix.remove(index);
                  }
                  else{
+                     System.out.println("ENTROU 3");
                      matrix.get(index).add(message_data);
                  }
              }

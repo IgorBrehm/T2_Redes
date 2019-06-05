@@ -9,16 +9,6 @@ import java.util.ArrayList;
  * @author Guilherme Piccoli, Fernando Maioli, Igor Brehm
  */
  
-
-/*
-
-Todo o processo de recepção e roteamento dos pacotes deve estar impresso na tela. Dessa
-forma, será possível visualizar todo o caminho por onde o pacote passou. Além disso, quando o
-destino receber um arquivo, o mesmo deve ser sinalizado com uma mensagem na tela, além de ser
-armazenado na própria máquina. (TODO)
-
-• deve ser possível visualizar o roteamento realizado. (PARTIALLY DONE)
-*/
 public class Host{
     
     public static int findIndex(ArrayList<ArrayList<String>> matrix, String filename){
@@ -56,20 +46,27 @@ public class Host{
                  
                  int index = findIndex(matrix, filename);
                  if(findIndex(matrix,filename) == -1){
+                    System.out.println("ENTROU 1");
                     ArrayList<String> row = new ArrayList<String>();
                     row.add(filename);
                     row.add(message_data);
                     matrix.add(row);
                  }
-                 else if(message_data.equals("ENDOFFILE")){
-                     PrintStream stream = new PrintStream(new File(filename));
+                 else if(message_data.contains("ENDOFFILE")){
+                     System.out.println("ENTROU 2");
+                     String path = System.getProperty("user.dir")+"/"+port+"/"+filename;
+                     System.out.println("PATH: "+ path);
+                     FileWriter fileWriter = new FileWriter(path);
+                     PrintWriter printWriter = new PrintWriter(fileWriter);
+                     
                      for(int i = 1; i < matrix.get(index).size(); i++){
-                         stream.println(matrix.get(index).get(i)); 
+                         printWriter.println(matrix.get(index).get(i)); 
                      }
-                     stream.close();
+                     printWriter.close();
                      matrix.remove(index);
                  }
                  else{
+                     System.out.println("ENTROU 3");
                      matrix.get(index).add(message_data);
                  }
             }
