@@ -91,7 +91,7 @@ public class Host{
         System.out.println("Agora digite o IP a ser usado:");
         String ip = in.nextLine();
         
-        File dir = new File(Integer.toString(port),ip); //pasta de destino das mensagens recebidas
+        File dir = new File(Integer.toString(port)); //pasta de destino das mensagens recebidas
         dir.mkdir();
         
         try {
