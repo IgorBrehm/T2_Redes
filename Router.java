@@ -24,7 +24,7 @@ public class Router {
     public static void main(String args[]) throws Exception {
         String ip = args[0];
         int port = 5723;
-   		DatagramSocket serverSocket = new DatagramSocket(port);
+   		DatagramSocket serverSocket = new DatagramSocket(port,InetAddress.getByName(ip));
         DatagramSocket clientSocket = new DatagramSocket();
         
         File dir = new File(Integer.toString(port)); //pasta de destino das mensagens recebidas

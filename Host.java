@@ -21,9 +21,9 @@ public class Host{
         return index;
     }
     
-    public static void waitForMessages(int port) {
+    public static void waitForMessages(int port,String ip) {
         try {
-            DatagramSocket serverSocket = new DatagramSocket(port);
+            DatagramSocket serverSocket = new DatagramSocket(port,InetAddress.getByName(ip));
             
             ArrayList<ArrayList<String>> matrix = new ArrayList<ArrayList<String>>();
 
@@ -91,13 +91,13 @@ public class Host{
         System.out.println("Agora digite o IP a ser usado:");
         String ip = in.nextLine();
         
-        File dir = new File(Integer.toString(port)); //pasta de destino das mensagens recebidas
+        File dir = new File(Integer.toString(port),ip); //pasta de destino das mensagens recebidas
         dir.mkdir();
         
         try {
             Thread t = new Thread() {
                 public void run() {
-                    waitForMessages(port);
+                    waitForMessages(port,ip);
                 }
             };
             t.start();
